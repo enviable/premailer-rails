@@ -12,7 +12,7 @@ class Premailer
     @config = {
       input_encoding: 'UTF-8',
       generate_text_part: true,
-      strategies: [:filesystem, :asset_pipeline, :network]
+      strategies: %i[filesystem sprockets propshaft network]
     }
     class << self
       attr_accessor :config

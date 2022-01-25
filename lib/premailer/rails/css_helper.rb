@@ -6,6 +6,7 @@ class Premailer
       FileNotFound = Class.new(StandardError)
 
       attr_accessor :cache
+
       self.cache = {}
 
       # Returns all linked CSS files concatenated as string.
@@ -35,7 +36,7 @@ class Premailer
       end
 
       def load_css_with_cache(url)
-        self.cache[url] ||= load_css(url)
+        cache[url] ||= load_css(url)
       end
 
       def cache_enabled?
@@ -48,15 +49,17 @@ class Premailer
           return css if css
         end
 
-        raise FileNotFound, %{File with URL "#{url}" could not be loaded by any strategy.}
+        raise FileNotFound, %(File with URL "#{url}" could not be loaded by any strategy.)
       end
 
       def find_strategy(key)
         case key
         when :filesystem
           CSSLoaders::FileSystemLoader
-        when :asset_pipeline
-          CSSLoaders::AssetPipelineLoader
+        when :sprockets
+          CSSLoaders::SprocketsLoader
+        when :propshaft
+          CSSLoaders::PropshaftLoader
         when :network
           CSSLoaders::NetworkLoader
         else
